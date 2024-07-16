@@ -1,11 +1,30 @@
 :root {
+  --background-color: rgba(255, 255, 255, 1);
+  --primary-color: rgba(242, 101, 0, 1);
+  --secondary-color: rgba(0, 0, 0, 1);
+  --table-filling-color: rgba(242, 101, 0, 0.36);
+  --table-grid-color: rgba(242, 101, 0, 0.9);
+  --table-headers-text-color: rgba(0, 0, 0, 1);
+  --table-headers-background-color: rgba(255, 128, 35, 1);
+  --finished-tag-background-color: rgba(82, 155, 46, 1);
+  --finished-tag-border-color: rgba(23, 98, 31, 1);
+  --canceled-tag-background-color: rgba(218, 61, 61, 1);
+  --canceled-tag-border-color: rgba(156, 41, 41, 1);
+  --scheduled-tag-background-color: rgba(240, 230, 140, 1);
+  --scheduled-tag-border-color: rgba(149, 137, 22, 1);
+  --live-tag-background-color: rgba(255, 126, 33, 1);
+  --live-tag-border-color: rgba(180, 76, 0, 1);
+  --select-and-inputs-background-color: rgba(250, 200, 163, 1);
+  --canceled-match-background-color: rgba(207, 152, 112, 0.36);
+
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--secondary-color);
+  background-color: var(--background-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -33,9 +52,9 @@ h1 {
   text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
+@media (prefers-color-scheme: dark) {
+  /*:root {*/
+  /*  color: #ffffff;*/
+  /*  background-color: #213547;*/
+  /*}*/
 }
