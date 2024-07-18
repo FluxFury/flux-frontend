@@ -1,4 +1,6 @@
 :root {
+	/*https://element-plus.org/en-US/guide/theming.html#custom-theme*/
+	/* TODO: создать тему как на сайте */
   --background-color: rgba(255, 255, 255, 1);
   --primary-color: rgba(242, 101, 0, 1);
   --secondary-color: rgba(0, 0, 0, 1);
@@ -33,24 +35,11 @@
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+	margin: 0;
+	padding: 0;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+#app {}
 
 @media (prefers-color-scheme: dark) {
   /*:root {*/
