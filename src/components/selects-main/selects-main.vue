@@ -10,17 +10,21 @@ const indeterminate = ref(initial_values.indeterminate_initial_value)
 const select_tournament_value = ref(initial_values.select_tournament_initial_value)
 const sports = ref(sports_data)
 const tournaments = ref(tournaments_data)
+const isSelectTournamentDisabled = ref(true)
 
 watch(select_sport_value, (val) => {
 	if (val.length === 0) {
 		checkAll.value = initial_values.checkAll_initial_value
 		select_tournament_value.value = initial_values.select_tournament_initial_value
 		indeterminate.value = initial_values.indeterminate_initial_value
+		isSelectTournamentDisabled.value = true
 	} else if (val.length === sports.value.length) {
 		checkAll.value = true
 		indeterminate.value = false
+		isSelectTournamentDisabled.value = false
 	} else {
 		indeterminate.value = true
+		isSelectTournamentDisabled.value = false
 	}
 })
 
@@ -32,6 +36,8 @@ const handleCheckAll = (val) => {
 		select_sport_value.value = []
 	}
 }
+
+
 </script>
 
 <template>
@@ -40,7 +46,7 @@ const handleCheckAll = (val) => {
 	  v-model="select_sport_value"
 	  multiple
 	  clearable
-	  placeholder="Select"
+	  placeholder="Select sport"
 	  popper-class="custom-header"
 	  :max-collapse-tags="1"
 	  class="select-sport"
@@ -66,8 +72,9 @@ const handleCheckAll = (val) => {
 	<el-select
 	  v-model="select_tournament_value"
 	  filterable
-	  placeholder="Select"
+	  placeholder="Select tournament"
 	  class="select-tournament"
+		:disabled="isSelectTournamentDisabled"
 	>
 	  <el-option
 		v-for="item in tournaments"
