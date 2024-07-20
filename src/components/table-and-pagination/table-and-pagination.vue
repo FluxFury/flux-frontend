@@ -32,7 +32,10 @@ const getTagType = (status) => {
 
 const handleRowClick = (row) => {
 	if (row.status !== 'CANCELED') {
-		router.push({ path: `/match/${row.id}` })
+		router.push({
+			path: `/match/${row.id}`,
+			query: { match: JSON.stringify(row) }
+		})
 	}
 }
 
@@ -106,5 +109,4 @@ const tableRowClassName = ({ row }) => {
 	//cursor: not-allowed;
 	pointer-events: none;
 }
-
 </style>
