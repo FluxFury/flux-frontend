@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { table_data, initial_values } from './data.js'
+import { getTagType } from "@/Utils/getTagType.js"
 
 
 const current_page = ref(initial_values.current_page_initial_value)
@@ -15,19 +16,6 @@ const handleSizeChange = (val) => {
 
 const handleCurrentChange = (val) => {
 	console.log(`current page: ${val}`)
-}
-
-const getTagType = (status) => {
-	switch (status) {
-		case "LIVE":
-			return "primary"
-		case "FINISHED":
-			return "success"
-		case "SCHEDULED":
-			return "warning"
-		case "CANCELED":
-			return "danger"
-	}
 }
 
 const handleRowClick = (row) => {

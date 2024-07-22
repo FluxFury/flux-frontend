@@ -1,30 +1,30 @@
 export const table_data = [
 	{
 		id: 1,
-		match: "Turkey - Albania",
+		match: "Manchester City - Chelsea",
 		status: "LIVE",
-		date: "08.10.1480 | 12:00",
+		date: "08.08.2024 10:00",
 		info: "X statements"
 	},
 	{
 		id: 2,
-		match: "Turkey - Albania",
+		match: "Russia - South Osetia",
 		status: "FINISHED",
-		date: "08.10.1480 | 12:00",
+		date: "08.11.2024 11:00",
 		info: "X statements"
 	},
 	{
 		id: 3,
 		match: "Turkey - Albania",
 		status: "SCHEDULED",
-		date: "08.10.1480 | 12:00",
+		date: "08.10.2024 12:00",
 		info: "X statements"
 	},
 	{
 		id: 4,
-		match: "Turkey - Albania",
+		match: "Gamlins - Kochkins",
 		status: "CANCELED",
-		date: "08.10.1480 | 12:00",
+		date: "15.12.2004 07:00",
 		info: "X statements"
 	},
 ]
