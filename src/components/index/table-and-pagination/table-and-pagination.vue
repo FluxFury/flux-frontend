@@ -52,7 +52,7 @@ const tableRowClassName = ({ row }) => {
 			@row-click="handleRowClick"
 			:row-class-name="tableRowClassName"
 		>
-			<el-table-column prop="match" label="Match" />
+			<el-table-column prop="title" label="Match" />
 			<el-table-column label="Status">
 				<template #default="scope">
 					<el-tag :type="getTagType(scope.row.status)">

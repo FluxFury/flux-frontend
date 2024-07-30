@@ -3,7 +3,6 @@ import { ref, watch } from "vue"
 
 import { sports_data, tournaments_data, initial_values } from "./data.js"
 
-
 const checkAll = ref(initial_values.checkAll_initial_value)
 const select_sport_value = ref(initial_values.select_sport_initial_value)
 const indeterminate = ref(initial_values.indeterminate_initial_value)
@@ -36,54 +35,37 @@ const handleCheckAll = (val) => {
 		select_sport_value.value = []
 	}
 }
-
-
 </script>
 
 <template>
-  <div class="selects-container">
-	<el-select
-	  v-model="select_sport_value"
-	  multiple
-	  clearable
-	  placeholder="Select sport"
-	  popper-class="custom-header"
-	  :max-collapse-tags="1"
-	  class="select-sport"
-	>
-	  <template #header>
-		<el-checkbox
-		  v-model="checkAll"
-		  :indeterminate="indeterminate"
-		  @change="handleCheckAll"
+	<div class="selects-container">
+		<el-select
+			v-model="select_sport_value"
+			multiple
+			clearable
+			placeholder="Select sport"
+			popper-class="custom-header"
+			:max-collapse-tags="1"
+			class="select-sport"
 		>
-			All
-		</el-checkbox>
-	  </template>
-		<el-option
-		  v-for="item in sports"
-		  :key="item.value"
-		  :label="item.label"
-		  :value="item.value"
-		/>
-	</el-select>
+			<template #header>
+				<el-checkbox v-model="checkAll" :indeterminate="indeterminate" @change="handleCheckAll">
+					All
+				</el-checkbox>
+			</template>
+			<el-option v-for="item in sports" :key="item.value" :label="item.label" :value="item.value" />
+		</el-select>
 
-
-	<el-select
-	  v-model="select_tournament_value"
-	  filterable
-	  placeholder="Select tournament"
-	  class="select-tournament"
-		:disabled="isSelectTournamentDisabled"
-	>
-	  <el-option
-		v-for="item in tournaments"
-		:key="item.value"
-		:label="item.label"
-		:value="item.value"
-	  />
-	</el-select>
-  </div>
+		<el-select
+			v-model="select_tournament_value"
+			filterable
+			placeholder="Select tournament"
+			class="select-tournament"
+			:disabled="isSelectTournamentDisabled"
+		>
+			<el-option v-for="item in tournaments" :key="item.value" :label="item.label" :value="item.value" />
+		</el-select>
+	</div>
 </template>
 
 <style scoped lang="scss">
