@@ -1,5 +1,3 @@
-<!--TODO: настроить, чтобы работали фильтры и чекбоксы на странице-->
-
 <script setup>
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
@@ -22,7 +20,7 @@ onMounted(() => {
 	<match-header
 		v-if="match_data"
 		:match_title="match_data.title"
-		:match_date="match_data.date"
+		:match_timestamp="match_data.timestamp"
 		:match_status="match_data.status"
 	/>
 

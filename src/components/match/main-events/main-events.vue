@@ -4,6 +4,7 @@ import { sort_options, initial_values } from "@/components/match/main-events/dat
 import { handleCheckAllChange } from "@/Utils/handleCheckAllChange.js"
 import { handleCheckedChange } from "@/Utils/handleCheckedChange.js"
 import { useEventsStore } from "@/stores/useEventStore.js"
+import { getFormattedDate } from "@/Utils/getFormattedDate.js"
 
 const props = defineProps(["events"])
 
@@ -16,7 +17,7 @@ const sort_type_value = ref(event_store.sort_type)
 const dates_params = {
 	check_all: ref(initial_values.dates_check_all_initial_value),
 	is_indeterminate: ref(initial_values.dates_is_indeterminate_initial_value),
-	checked: ref(event_store.dates)
+	checked: ref(event_store.timestamps)
 }
 
 const persons_params = {
@@ -27,7 +28,8 @@ const persons_params = {
 
 watch(
 	() => dates_params.checked.value,
-	(new_dates) => event_store.setDatesFilter(new_dates)
+	// here we use timestamps instead of dates
+	(new_timestamps) => event_store.setTimestampsFilter(new_timestamps)
 )
 
 watch(
@@ -53,7 +55,10 @@ watch(
 		<el-container>
 			<el-main class="events-list-container">
 				<el-timeline>
-					<el-timeline-item v-for="event in event_store.filtered_events" :timestamp="event.date">
+					<el-timeline-item
+						v-for="event in event_store.filtered_events"
+						:timestamp="getFormattedDate(event.timestamp)"
+					>
 						<h2 class="timeline-event-header">{{ event.title }}</h2>
 						<p>{{ event.text }}</p>
 					</el-timeline-item>
@@ -69,7 +74,7 @@ watch(
 							(checkAll) =>
 								handleCheckAllChange(
 									checkAll,
-									event_store.dates,
+									event_store.timestamps,
 									dates_params.checked,
 									dates_params.is_indeterminate
 								)
@@ -84,7 +89,7 @@ watch(
 							(checked) =>
 								handleCheckedChange(
 									checked,
-									event_store.dates,
+									event_store.timestamps,
 									dates_params.check_all,
 									dates_params.is_indeterminate
 								)
@@ -92,12 +97,12 @@ watch(
 					>
 						<el-checkbox
 							class="filter-checkbox-item"
-							v-for="date in event_store.dates"
-							:key="date"
-							:label="date"
-							:value="date"
+							v-for="timestamp in event_store.timestamps"
+							:key="timestamp"
+							:label="getFormattedDate(timestamp)"
+							:value="timestamp"
 						>
-							{{ date }}
+							{{ getFormattedDate(timestamp) }}
 						</el-checkbox>
 					</el-checkbox-group>
 					<h3 class="filter-section-header">Person</h3>

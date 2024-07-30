@@ -4,10 +4,10 @@ export const useEventsStore = defineStore("events", {
 	state: () => ({
 		events: [],
 		filtered_events: [],
-		dates: [],
+		timestamps: [],
 		persons: [],
-		sort_type: "Person",
-		dates_filter: [],
+		sort_type: "Date",
+		timestamps_filter: [],
 		persons_filter: []
 	}),
 	actions: {
@@ -15,15 +15,15 @@ export const useEventsStore = defineStore("events", {
 			console.log(events)
 			this.events = events
 			this.filterEvents()
-			this.extractUniqueDatesAndPersons()
+			this.extractUniqueTimestampsAndPersons()
 			this.sortEvents()
 		},
 		setSortType(sort_type) {
 			this.sort_type = sort_type
 			this.sortEvents()
 		},
-		setDatesFilter(dates) {
-			this.dates_filter = dates
+		setTimestampsFilter(timestamps) {
+			this.timestamps_filter = timestamps
 			this.filterEvents()
 		},
 		setPersonsFilter(persons) {
@@ -32,28 +32,30 @@ export const useEventsStore = defineStore("events", {
 		},
 		filterEvents() {
 			this.filtered_events = this.events.filter((event) => {
-				const dateMatch = this.dates_filter.length === 0 || this.dates_filter.includes(event.date)
-				const personMatch =
+				const timestamp_match =
+					this.timestamps_filter.length === 0 || this.timestamps_filter.includes(event.timestamp)
+				const person_match =
 					this.persons_filter.length === 0 ||
 					event.persons.some((person) => this.persons_filter.includes(person))
-				return dateMatch && personMatch
+				return timestamp_match && person_match
 			})
+			this.sortEvents()
 		},
 		sortEvents() {
 			if (this.sort_type === "Date") {
-				this.filtered_events.sort((a, b) => new Date(b.date) - new Date(a.date))
+				this.filtered_events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
 			} else if (this.sort_type === "Person") {
 				this.filtered_events.sort((a, b) => b.persons[0].localeCompare(a.persons[0]))
 			}
 		},
-		extractUniqueDatesAndPersons() {
-			const dates_set = new Set()
+		extractUniqueTimestampsAndPersons() {
+			const timestamps_set = new Set()
 			const persons_set = new Set()
 			this.events.forEach((event) => {
-				dates_set.add(event.date)
+				timestamps_set.add(event.timestamp)
 				event.persons.forEach((person) => persons_set.add(person))
 			})
-			this.dates = Array.from(dates_set)
+			this.timestamps = Array.from(timestamps_set)
 			this.persons = Array.from(persons_set)
 		}
 	}

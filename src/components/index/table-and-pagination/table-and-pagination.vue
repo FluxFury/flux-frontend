@@ -1,10 +1,9 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-import { table_data, initial_values } from './data.js'
+import { ref } from "vue"
+import { useRouter } from "vue-router"
+import { table_data, initial_values } from "./data.js"
 import { getTagType } from "@/Utils/getTagType.js"
-
+import { getFormattedDate } from "@/Utils/getFormattedDate.js"
 
 const current_page = ref(initial_values.current_page_initial_value)
 const page_size = ref(initial_values.page_size_initial_value)
@@ -19,7 +18,7 @@ const handleCurrentChange = (val) => {
 }
 
 const handleRowClick = (row) => {
-	if (row.status !== 'CANCELED') {
+	if (row.status !== "CANCELED") {
 		router.push({
 			path: `/match/${row.id}`,
 			query: { match: JSON.stringify(row) }
@@ -60,8 +59,17 @@ const tableRowClassName = ({ row }) => {
 					</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column prop="date" label="Date" />
-			<el-table-column prop="info" label="Info" />
+			<el-table-column label="Date">
+				<template #default="scope">
+					{{ getFormattedDate(scope.row.timestamp) }}
+				</template>
+			</el-table-column>
+
+			<el-table-column label="Count events">
+				<template #default="scope">
+					{{ scope.row.events + " events" }}
+				</template>
+			</el-table-column>
 		</el-table>
 
 		<el-pagination

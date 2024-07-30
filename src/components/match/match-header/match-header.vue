@@ -1,8 +1,10 @@
 <script setup>
 import { ArrowRight } from "@element-plus/icons-vue"
 import { getTagType } from "@/Utils/getTagType.js"
+import { getFormattedDate } from "@/Utils/getFormattedDate.js"
 
-const props = defineProps(["match_title", "match_date", "match_status"])
+const props = defineProps(["match_title", "match_timestamp", "match_status"])
+console.log(props.match_timestamp)
 </script>
 
 <template>
@@ -10,15 +12,17 @@ const props = defineProps(["match_title", "match_date", "match_status"])
 		<el-breadcrumb :separator-icon="ArrowRight" class="history-breadcrumb">
 			<el-breadcrumb-item :to="{ path: '/' }">Main page</el-breadcrumb-item>
 			<el-breadcrumb-item>Football matches</el-breadcrumb-item>
-			<el-breadcrumb-item>{{ match_title }} {{ match_date }}</el-breadcrumb-item>
+			<el-breadcrumb-item>
+				{{ props.match_title }} {{ getFormattedDate(props.match_timestamp) }}
+			</el-breadcrumb-item>
 		</el-breadcrumb>
 
 		<div class="match-title-container">
 			<el-avatar class="tournament-avatar" src="https://cdn.worldvectorlogo.com/logos/premier-league-1.svg" />
-			<h3 class="match-title">{{ match_title }}</h3>
-			<h3 class="match-date">{{ match_date }}</h3>
+			<h3 class="match-title">{{ props.match_title }}</h3>
+			<h3 class="match-date">{{ getFormattedDate(props.match_timestamp) }}</h3>
 			<el-tag :type="getTagType(match_status)">
-				{{ match_status }}
+				{{ props.match_status }}
 			</el-tag>
 		</div>
 		<el-divider class="match-title-bottom-divider" />

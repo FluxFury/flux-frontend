@@ -1,18 +1,18 @@
 export const events = [
 	{
-		date: "19.08.2020 18:18",
+		timestamp: 1597861080000,
 		title: "Antony broke his nose",
 		text: "“AAArgh My nose is broken!” - screamed Antony, when he broke his nose at punishment park",
 		persons: ["Antony"]
 	},
 	{
-		date: "22.08.2020 18:18",
+		timestamp: 1598120280000,
 		title: "Ronaldo broke his leg",
 		text: "“My leg is broken” - Ronaldo said when mad man shoot him with ak-47!",
 		persons: ["Ronaldo"]
 	},
 	{
-		date: "20.08.2020 18:18",
+		timestamp: 1597947480000,
 		title: "Messi’s fan made Haaland cry in a restaurant",
 		text:
 			"\t\t\t\t\t\t\t\t\t\t\t\t”Франция была технически превзойдена Испанией — она оказалась неспособна вывести её из своей\n" +
