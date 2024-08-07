@@ -14,9 +14,9 @@ event_store.setEvents(props.events)
 
 const sort_type_value = ref(event_store.sort_type)
 
-const dates_params = {
-	check_all: ref(initial_values.dates_check_all_initial_value),
-	is_indeterminate: ref(initial_values.dates_is_indeterminate_initial_value),
+const timestamps_params = {
+	check_all: ref(initial_values.timestamps_check_all_initial_value),
+	is_indeterminate: ref(initial_values.timestamps_is_indeterminate_initial_value),
 	checked: ref(event_store.timestamps)
 }
 
@@ -27,7 +27,7 @@ const persons_params = {
 }
 
 watch(
-	() => dates_params.checked.value,
+	() => timestamps_params.checked.value,
 	// here we use timestamps instead of dates
 	(new_timestamps) => event_store.setTimestampsFilter(new_timestamps)
 )
@@ -68,15 +68,15 @@ watch(
 				<div class="events-filter-container">
 					<h3 class="filter-section-header">Date</h3>
 					<el-checkbox
-						v-model="dates_params.check_all.value"
-						:indeterminate="dates_params.is_indeterminate.value"
+						v-model="timestamps_params.check_all.value"
+						:indeterminate="timestamps_params.is_indeterminate.value"
 						@change="
 							(checkAll) =>
 								handleCheckAllChange(
 									checkAll,
 									event_store.timestamps,
-									dates_params.checked,
-									dates_params.is_indeterminate
+									timestamps_params.checked,
+									timestamps_params.is_indeterminate
 								)
 						"
 					>
@@ -84,14 +84,14 @@ watch(
 					</el-checkbox>
 					<el-checkbox-group
 						class="filter-checkbox-group"
-						v-model="dates_params.checked.value"
+						v-model="timestamps_params.checked.value"
 						@change="
 							(checked) =>
 								handleCheckedChange(
 									checked,
 									event_store.timestamps,
-									dates_params.check_all,
-									dates_params.is_indeterminate
+									timestamps_params.check_all,
+									timestamps_params.is_indeterminate
 								)
 						"
 					>

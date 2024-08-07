@@ -12,7 +12,6 @@ export const useEventsStore = defineStore("events", {
 	}),
 	actions: {
 		setEvents(events) {
-			console.log(events)
 			this.events = events
 			this.filterEvents()
 			this.extractUniqueTimestampsAndPersons()

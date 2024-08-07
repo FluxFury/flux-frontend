@@ -11,8 +11,8 @@ export const sort_options = [
 
 export const initial_values = {
 	// Dates params
-	dates_check_all_initial_value: true,
-	dates_is_indeterminate_initial_value: false,
+	timestamps_check_all_initial_value: true,
+	timestamps_is_indeterminate_initial_value: false,
 
 	// Persons params
 	persons_check_all_initial_value: true,

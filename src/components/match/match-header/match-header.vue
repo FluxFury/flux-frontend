@@ -4,7 +4,6 @@ import { getTagType } from "@/Utils/getTagType.js"
 import { getFormattedDate } from "@/Utils/getFormattedDate.js"
 
 const props = defineProps(["match_title", "match_timestamp", "match_status"])
-console.log(props.match_timestamp)
 </script>
 
 <template>

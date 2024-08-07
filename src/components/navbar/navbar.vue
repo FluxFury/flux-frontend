@@ -6,7 +6,6 @@ import { Moon, Search, Sunny } from "@element-plus/icons-vue"
 import { initial_values } from "@/components/navbar/data.js"
 import logo from "@/assets/images/image 12.png"
 
-
 const theme_switch = ref(initial_values.theme_switch_initial_value)
 const search_input_value = ref(initial_values.search_input_initial_value)
 const router = useRouter()
@@ -28,17 +27,8 @@ const handleLogoClick = () => {
 
 	<!--logo and search-->
 	<div class="logo-and-search-container">
-		<el-image
-			class="logoImage"
-			:src="logo"
-			@click="handleLogoClick"
-		/>
-		<el-input
-			class="navbar-search-input"
-			v-model="search_input_value"
-			placeholder="Search"
-			:prefix-icon="Search"
-		/>
+		<el-image class="logoImage" :src="logo" @click="handleLogoClick" />
+		<el-input class="navbar-search-input" v-model="search_input_value" placeholder="Search" :prefix-icon="Search" />
 	</div>
 </template>
 
@@ -62,6 +52,7 @@ const handleLogoClick = () => {
 .logoImage {
 	width: 25vw;
 	margin-left: 2rem;
+	cursor: pointer;
 }
 
 .navbar-search-input {
