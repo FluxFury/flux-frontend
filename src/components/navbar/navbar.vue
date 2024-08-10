@@ -1,13 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { Moon, Search, Sunny } from "@element-plus/icons-vue"
-
-import { initial_values } from "@/components/navbar/data.js"
+import { initial_values } from "@/components/navbar/data.ts"
 import logo from "@/assets/images/image 12.png"
 
-const theme_switch = ref(initial_values.theme_switch_initial_value)
-const search_input_value = ref(initial_values.search_input_initial_value)
+const theme_switch = ref<boolean>(initial_values.theme_switch_initial_value)
+const search_input_value = ref<string>(initial_values.search_input_initial_value)
 const router = useRouter()
 
 const handleLogoClick = () => {

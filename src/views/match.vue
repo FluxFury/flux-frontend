@@ -1,16 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 import MatchHeader from "@/components/match/match-header/match-header.vue"
 import Teams from "@/components/match/teams/teams.vue"
 import MainEvents from "@/components/match/main-events/main-events.vue"
-import { events } from "@/Utils/match_test_data.js"
+import { events } from "@/Utils/matchTestData"
+import type { Match } from "@/types/match"
 
 const route = useRoute()
-const match_data = ref(null)
+const match_data = ref<Match>()
 
 onMounted(() => {
-	if (route.query.match) {
+	if (typeof route.query.match === "string") {
 		match_data.value = JSON.parse(route.query.match)
 	}
 })

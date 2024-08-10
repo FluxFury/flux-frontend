@@ -1,7 +1,7 @@
-<script setup>
-import { team1, team2 } from "@/components/match/teams/data.js"
+<script setup lang="ts">
+import { team1, team2 } from "@/components/match/teams/data.ts"
 
-const props = defineProps(["match_title"])
+const props = defineProps<{ match_title: string }>()
 
 const first_team_title = props.match_title.match(/^([\w\s]+)/)[0]
 const second_team_title = props.match_title.match(/([\w\s]+)$/)[0]

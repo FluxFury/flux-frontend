@@ -1,12 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue"
-import { sort_options, initial_values } from "@/components/match/main-events/data.js"
-import { handleCheckAllChange } from "@/Utils/handleCheckAllChange.js"
-import { handleCheckedChange } from "@/Utils/handleCheckedChange.js"
-import { useEventsStore } from "@/stores/useEventStore.js"
-import { getFormattedDate } from "@/Utils/getFormattedDate.js"
+import { sort_options, initial_values } from "@/components/match/main-events/data.ts"
+import handleCheckAllChange from "@/Utils/handleCheckAllChange.ts"
+import handleCheckedChange from "@/Utils/handleCheckedChange.ts"
+import { useEventsStore } from "@/stores/useEventStore.ts"
+import { getFormattedDate } from "@/Utils/getFormattedDate.ts"
+import type { Event } from "@/types/event"
 
-const props = defineProps(["events"])
+const props = defineProps<{ events: Event[] }>()
 
 const event_store = useEventsStore()
 
@@ -137,11 +138,11 @@ watch(
 						<el-checkbox
 							class="filter-checkbox-item"
 							v-for="person in event_store.persons"
-							:key="person"
+							:key="person.id"
 							:label="person"
 							:value="person"
 						>
-							{{ person }}
+							{{ person.name }}
 						</el-checkbox>
 					</el-checkbox-group>
 				</div>

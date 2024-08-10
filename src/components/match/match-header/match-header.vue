@@ -1,9 +1,14 @@
-<script setup>
+<script lang="ts" setup>
 import { ArrowRight } from "@element-plus/icons-vue"
-import { getTagType } from "@/Utils/getTagType.js"
-import { getFormattedDate } from "@/Utils/getFormattedDate.js"
+import { getTagType } from "@/Utils/getTagType.ts"
+import { getFormattedDate } from "@/Utils/getFormattedDate.ts"
+import { MatchTag } from "@/types/match"
 
-const props = defineProps(["match_title", "match_timestamp", "match_status"])
+const props = defineProps<{
+	match_title: string
+	match_timestamp: number
+	match_status: MatchTag
+}>()
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const props = defineProps(["match_title", "match_timestamp", "match_status"])
 			<el-avatar class="tournament-avatar" src="https://cdn.worldvectorlogo.com/logos/premier-league-1.svg" />
 			<h3 class="match-title">{{ props.match_title }}</h3>
 			<h3 class="match-date">{{ getFormattedDate(props.match_timestamp) }}</h3>
-			<el-tag :type="getTagType(match_status)">
+			<el-tag :type="getTagType(props.match_status)">
 				{{ props.match_status }}
 			</el-tag>
 		</div>

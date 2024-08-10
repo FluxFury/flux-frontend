@@ -1,3 +1,4 @@
+// TODO: тут все привести к сущностям из api
 export const table_data = [
 	{
 		id: 1,

@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import SelectsMain from "@/components/index/selects-main/selects-main.vue"
 import TableAndPagination from "@/components/index/table-and-pagination/table-and-pagination.vue"
 </script>
 
 <template>
 	<div>
-		<selects-main/>
-		<table-and-pagination/>
+		<selects-main />
+		<table-and-pagination />
 	</div>
 </template>

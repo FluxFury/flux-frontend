@@ -1,20 +1,26 @@
-<script setup>
+<!--TODO: исправить ошибки-->
+<!--TODO: оствновился на main-events-->
+<!--TODO: исправить ошибки в доке для api-->
+<!--TODO: исправить кодстайл импортов vue -> libs -> element+ -> local imports-->
+
+<script setup lang="ts">
 import Navbar from "@/components/navbar/navbar.vue"
 </script>
 
 <template>
 	<el-container>
 		<el-header class="header-container">
-			<navbar/>
+			<navbar />
 		</el-header>
 		<el-main class="main-container">
-			<router-view/>
+			<router-view />
 		</el-main>
 	</el-container>
 </template>
 
 <style>
-.header-container, .main-container {
+.header-container,
+.main-container {
 	padding: 0;
 	margin: 0;
 	height: fit-content;
