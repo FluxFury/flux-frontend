@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
-import { Person } from "@/types/person"
 import { EventsSortingTypes } from "@/types/eventsStortingTypes"
 import type { Event } from "@/types/event"
+import type { Person } from "@/types/person"
 
 interface EventsState {
 	events: Event[]

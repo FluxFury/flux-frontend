@@ -2,7 +2,7 @@
 import { ArrowRight } from "@element-plus/icons-vue"
 import { getTagType } from "@/Utils/getTagType.ts"
 import { getFormattedDate } from "@/Utils/getFormattedDate.ts"
-import { MatchTag } from "@/types/match"
+import type { MatchTag } from "@/types/match"
 
 const props = defineProps<{
 	match_title: string

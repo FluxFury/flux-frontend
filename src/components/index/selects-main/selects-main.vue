@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { sports_data, initial_values, tournaments_data } from "./data.ts"
-import { Sport } from "@/types/sport"
-import { Tournament } from "@/types/tournament"
+import type { Sport } from "@/types/sport"
+import type { Tournament } from "@/types/tournament"
 
 const checkAll = ref<boolean>(initial_values.checkAll_initial_value)
 const select_sport_value = ref<Sport[]>(initial_values.select_sport_initial_value)

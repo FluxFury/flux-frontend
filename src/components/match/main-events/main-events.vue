@@ -3,8 +3,8 @@ import { ref, watch } from "vue"
 import { sort_options, initial_values } from "@/components/match/main-events/data.ts"
 import handleCheckAllChange from "@/Utils/handleCheckAllChange.ts"
 import handleCheckedChange from "@/Utils/handleCheckedChange.ts"
-import { useEventsStore } from "@/stores/useEventStore.ts"
 import { getFormattedDate } from "@/Utils/getFormattedDate.ts"
+import { useEventsStore } from "@/stores/useEventStore.ts"
 import type { Event } from "@/types/event"
 
 const props = defineProps<{ events: Event[] }>()

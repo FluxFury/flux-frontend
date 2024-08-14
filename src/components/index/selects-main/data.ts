@@ -1,4 +1,4 @@
-import { Sport } from "@/types/sport"
+import type { Sport } from "@/types/sport"
 
 export const sports_data: Sport[] = [
 	{
@@ -57,7 +57,7 @@ export const sports_data: Sport[] = [
 	}
 ]
 
-//TODO: убрать гадость
+//TODO: убрать это, вся информация в sports_data (SportResponse в будущем)
 export const tournaments_data = [
 	{
 		value: "Champions League",

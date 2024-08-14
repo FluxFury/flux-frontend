@@ -1,7 +1,5 @@
-<!--TODO: исправить ошибки-->
-<!--TODO: оствновился на main-events-->
 <!--TODO: исправить ошибки в доке для api-->
-<!--TODO: исправить кодстайл импортов vue -> libs -> element+ -> local imports-->
+<!--TODO: разбросать везде типы, чтобы работало нормально-->
 
 <script setup lang="ts">
 import Navbar from "@/components/navbar/navbar.vue"

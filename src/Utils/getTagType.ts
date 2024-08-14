@@ -1,4 +1,4 @@
-import { MatchTag } from "@/types/match"
+import type { MatchTag } from "@/types/match"
 
 export const getTagType = (status: MatchTag) => {
 	switch (status) {
