@@ -1,11 +1,14 @@
-<script setup>
+<!--TODO: исправить ошибки в доке для api-->
+<!--TODO: разбросать везде типы, чтобы работало нормально-->
+
+<script setup lang="ts">
 import Navbar from "@/components/navbar/navbar.vue"
 </script>
 
 <template>
 	<el-container>
 		<el-header class="header-container">
-			<navbar/>
+			<navbar />
 		</el-header>
 		<el-main class="main-container">
 			<router-view />
@@ -14,7 +17,8 @@ import Navbar from "@/components/navbar/navbar.vue"
 </template>
 
 <style>
-.header-container, .main-container {
+.header-container,
+.main-container {
 	padding: 0;
 	margin: 0;
 	height: fit-content;

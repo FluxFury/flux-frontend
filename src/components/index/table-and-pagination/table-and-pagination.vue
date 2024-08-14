@@ -1,9 +1,15 @@
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+<script setup lang="ts">
+import { ref } from "vue"
+import { useRouter } from "vue-router"
+import { table_data, initial_values } from "./data.ts"
+import { getTagType } from "@/Utils/getTagType.ts"
+import { getFormattedDate } from "@/Utils/getFormattedDate.ts"
 
-import { table_data, initial_values } from './data.js'
-
+interface RowType {
+	status: string
+	timestamp: number
+	events: number
+}
 
 const current_page = ref(initial_values.current_page_initial_value)
 const page_size = ref(initial_values.page_size_initial_value)
@@ -17,21 +23,8 @@ const handleCurrentChange = (val) => {
 	console.log(`current page: ${val}`)
 }
 
-const getTagType = (status) => {
-	switch (status) {
-		case "LIVE":
-			return "primary"
-		case "FINISHED":
-			return "success"
-		case "SCHEDULED":
-			return "warning"
-		case "CANCELED":
-			return "danger"
-	}
-}
-
 const handleRowClick = (row) => {
-	if (row.status !== 'CANCELED') {
+	if (row.status !== "CANCELED") {
 		router.push({
 			path: `/match/${row.id}`,
 			query: { match: JSON.stringify(row) }
@@ -64,16 +57,25 @@ const tableRowClassName = ({ row }) => {
 			@row-click="handleRowClick"
 			:row-class-name="tableRowClassName"
 		>
-			<el-table-column prop="match" label="Match" />
+			<el-table-column prop="title" label="Match" />
 			<el-table-column label="Status">
 				<template #default="scope">
-					<el-tag :type="getTagType(scope.row.status)">
+					<el-tag :type="getTagType((scope as { row: RowType }).row.status)">
 						{{ scope.row.status }}
 					</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column prop="date" label="Date" />
-			<el-table-column prop="info" label="Info" />
+			<el-table-column label="Date">
+				<template #default="scope">
+					{{ getFormattedDate((scope as { row: RowType }).row.timestamp) }}
+				</template>
+			</el-table-column>
+
+			<el-table-column label="Count events">
+				<template #default="scope">
+					{{ (scope as { row: RowType }).row.events + " events" }}
+				</template>
+			</el-table-column>
 		</el-table>
 
 		<el-pagination
