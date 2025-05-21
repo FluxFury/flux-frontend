@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { computed } from "vue"
 import { Moon, Search, Sunny } from "@element-plus/icons-vue"
 import { initial_values } from "@/components/navbar/data.ts"
 import logo from "@/assets/images/image 12.png"
+import { useMainStore } from "@/stores/useMainStore"
 
 const theme_switch = ref<boolean>(initial_values.theme_switch_initial_value)
-const search_input_value = ref<string>(initial_values.search_input_initial_value)
+const main = useMainStore()
+// двусторонний биндинг на стор
+const search_input_value = computed({
+  get: () => main.searchTerm,
+  set: v => main.searchTerm = v
+})
 const router = useRouter()
 
 const handleLogoClick = () => {

@@ -1,206 +1,170 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
-import { sort_options, initial_values } from "@/components/match/main-events/data.ts"
-import handleCheckAllChange from "@/Utils/handleCheckAllChange.ts"
-import handleCheckedChange from "@/Utils/handleCheckedChange.ts"
-import { getFormattedDate } from "@/Utils/getFormattedDate.ts"
-import { useEventsStore } from "@/stores/useEventStore.ts"
-import type { Event } from "@/types/event"
+import { ref, watch, defineComponent, h, Ref } from "vue"
+import { ElCheckbox, ElCheckboxGroup, type CheckboxValueType, type CheckboxGroupValueType } from "element-plus"
+import { useEventsStore } from "@/stores/useEventStore"
+import { getFormattedDate } from "@/Utils/getFormattedDate"
+import type { MatchEventOut } from "@/types/api"
 
-const props = defineProps<{ events: Event[] }>()
+/* ---------- входные данные от бэка ---------- */
+interface Facet { keyword: string; count: number }
+interface Facets {
+  available_dates: { date: string; count: number }[]
+  people: Facet[]
+  orgs: Facet[]
+  events: Facet[]
+  locations: Facet[]
+  other: Facet[]
+}
+const props = defineProps<{ events: MatchEventOut[]; facets: Facets }>()
 
-const event_store = useEventsStore()
+/* ---------- Pinia ---------- */
+const es = useEventsStore()
+es.setEvents(props.events)
 
-event_store.setEvents(props.events)
+/* ---------- сортировка ---------- */
+const sortOptions = [
+  { value: "date_desc", label: "Date ↓" },
+  { value: "date_asc",  label: "Date ↑" },
+  { value: "relevance", label: "Relevance" }
+]
+const sortValue = ref(es.sortType)
+watch(sortValue, v => es.setSortType(v))
 
-const sort_type_value = ref(event_store.sort_type)
-
-const timestamps_params = {
-	check_all: ref(initial_values.timestamps_check_all_initial_value),
-	is_indeterminate: ref(initial_values.timestamps_is_indeterminate_initial_value),
-	checked: ref(event_store.timestamps)
+/* ====================================================== */
+/*               CHECK‑ALL COMPOSABLE (no generics)       */
+/* ====================================================== */
+export type CBVal = string | number
+interface CheckState {
+  full: CBVal[]
+  checked: Ref<CBVal[]>
+  checkAll: Ref<boolean>
+  indeterminate: Ref<boolean>
+  syncFromGroup: (vals: CheckboxGroupValueType) => void
+  toggleAll: (val: CheckboxValueType) => void
 }
 
-const persons_params = {
-	check_all: ref(initial_values.persons_check_all_initial_value),
-	is_indeterminate: ref(initial_values.persons_is_indeterminate_initial_value),
-	checked: ref(event_store.persons)
+function makeCheckState(full: CBVal[]): CheckState {
+  const checked = ref<CBVal[]>([...full])
+  const checkAll = ref(true)
+  const indeterminate = ref(false)
+
+  const syncFromGroup = (vals: CheckboxGroupValueType) => {
+    const arr = vals as CBVal[]
+    checked.value       = arr
+    checkAll.value      = arr.length === full.length
+    indeterminate.value = arr.length > 0 && arr.length < full.length
+  }
+
+  const toggleAll = (val: CheckboxValueType) => {
+    const bool = !!val
+    checkAll.value      = bool
+    indeterminate.value = false
+    checked.value       = bool ? [...full] : []
+  }
+
+  return { full, checked, checkAll, indeterminate, syncFromGroup, toggleAll }
 }
 
-watch(
-	() => timestamps_params.checked.value,
-	// here we use timestamps instead of dates
-	(new_timestamps) => event_store.setTimestampsFilter(new_timestamps)
-)
+/* ---------- states ---------- */
+const dateState   = makeCheckState(es.timestamps as unknown as CBVal[])
+const personState = makeCheckState(props.facets.people.map(p => p.keyword))
+const eventState  = makeCheckState(props.facets.events.map(e => e.keyword))
+const orgState    = makeCheckState(props.facets.orgs.map(o => o.keyword))
 
-watch(
-	() => persons_params.checked.value,
-	(new_persons) => event_store.setPersonsFilter(new_persons)
-)
+/* ---------- watchers ---------- */
+watch(() => dateState.checked.value  , v => es.setTimestampsFilter(v as number[]), { immediate: true })
+watch(() => personState.checked.value, v => es.setPersonsFilter(v as string[] ) , { immediate: true })
+watch(() => eventState.checked.value , v => es.setEventsFilter(v  as string[] ) , { immediate: true })
+watch(() => orgState.checked.value   , v => es.setOrgsFilter(v    as string[] ) , { immediate: true })
 
-watch(
-	() => sort_type_value.value,
-	(new_sort_type) => event_store.setSortType(new_sort_type)
-)
+/* ====================================================== */
+/*                FILTER BLOCK (render fn)                */
+/* ====================================================== */
+const FilterBlock = defineComponent({
+  name: "FilterBlock",
+  props: {
+    title : { type: String, required: true },
+    state : { type: Object as () => CheckState, required: true },
+    format: { type: Function, default: (v: CBVal) => String(v) }
+  },
+  setup(p) {
+    return () => h("section", { class: "filter-block" }, [
+      h("h3", { class: "filter-header" }, p.title),
+
+      h(
+        ElCheckbox,
+        {
+          modelValue: p.state.checkAll.value,
+          indeterminate: p.state.indeterminate.value,
+          "onUpdate:modelValue": p.state.toggleAll
+        },
+        { default: () => "All" }
+      ),
+
+      h(
+        ElCheckboxGroup,
+        {
+          modelValue: p.state.checked.value,
+          "onUpdate:modelValue": p.state.syncFromGroup,
+          class: "filter-group"
+        },
+        () => p.state.full.map(opt =>
+          h(
+            ElCheckbox,
+            { value: opt },
+            { default: () => p.format(opt) }
+          )
+        )
+      )
+    ])
+  }
+})
 </script>
 
 <template>
-	<div class="main-events-container">
-		<el-divider class="events-and-match-header-divider" />
-		<div class="main-events-header-container">
-			<h1 class="main-events-header">Main events</h1>
-			<el-select v-model="sort_type_value" placeholder="Sort by" style="width: 240px" class="events-sort-select">
-				<el-option v-for="item in sort_options" :key="item.value" :label="item.label" :value="item.value" />
-			</el-select>
-		</div>
-		<el-container>
-			<el-main class="events-list-container">
-				<el-timeline>
-					<el-timeline-item
-						v-for="event in event_store.filtered_events"
-						:timestamp="getFormattedDate(event.timestamp)"
-					>
-						<h2 class="timeline-event-header">{{ event.title }}</h2>
-						<p>{{ event.text }}</p>
-					</el-timeline-item>
-				</el-timeline>
-			</el-main>
-			<el-aside class="events-filter-aside">
-				<div class="events-filter-container">
-					<h3 class="filter-section-header">Date</h3>
-					<el-checkbox
-						v-model="timestamps_params.check_all.value"
-						:indeterminate="timestamps_params.is_indeterminate.value"
-						@change="
-							(checkAll) =>
-								handleCheckAllChange(
-									checkAll,
-									event_store.timestamps,
-									timestamps_params.checked,
-									timestamps_params.is_indeterminate
-								)
-						"
-					>
-						All
-					</el-checkbox>
-					<el-checkbox-group
-						class="filter-checkbox-group"
-						v-model="timestamps_params.checked.value"
-						@change="
-							(checked) =>
-								handleCheckedChange(
-									checked,
-									event_store.timestamps,
-									timestamps_params.check_all,
-									timestamps_params.is_indeterminate
-								)
-						"
-					>
-						<el-checkbox
-							class="filter-checkbox-item"
-							v-for="timestamp in event_store.timestamps"
-							:key="timestamp"
-							:label="getFormattedDate(timestamp)"
-							:value="timestamp"
-						>
-							{{ getFormattedDate(timestamp) }}
-						</el-checkbox>
-					</el-checkbox-group>
-					<h3 class="filter-section-header">Person</h3>
-					<el-checkbox
-						v-model="persons_params.check_all.value"
-						:indeterminate="persons_params.is_indeterminate.value"
-						@change="
-							(checkAll) =>
-								handleCheckAllChange(
-									checkAll,
-									event_store.persons,
-									persons_params.checked,
-									persons_params.is_indeterminate
-								)
-						"
-					>
-						All
-					</el-checkbox>
-					<el-checkbox-group
-						class="filter-checkbox-group"
-						v-model="persons_params.checked.value"
-						@change="
-							(checked) =>
-								handleCheckedChange(
-									checked,
-									event_store.persons,
-									persons_params.check_all,
-									persons_params.is_indeterminate
-								)
-						"
-					>
-						<el-checkbox
-							class="filter-checkbox-item"
-							v-for="person in event_store.persons"
-							:key="person.id"
-							:label="person"
-							:value="person"
-						>
-							{{ person.name }}
-						</el-checkbox>
-					</el-checkbox-group>
-				</div>
-			</el-aside>
-		</el-container>
-	</div>
+  <div class="main-events">
+    <div class="header">
+      <h1>Main events</h1>
+      <el-select v-model="sortValue" style="width:240px">
+        <el-option v-for="o in sortOptions" :key="o.value" :label="o.label" :value="o.value" />
+      </el-select>
+    </div>
+
+    <el-container>
+      <el-main class="timeline-col">
+        <template v-if="es.filtered_events.length">
+          <el-timeline>
+            <el-timeline-item
+              v-for="ev in es.filtered_events"
+              :key="ev.id"
+              :timestamp="getFormattedDate((ev.news_creation_time ?? ev.timestamp) as string | number)"
+            >
+              <h3>{{ ev.header || ev.title || ev.text.slice(0,120) }}</h3>
+              <p class="rel">Relevance: {{ ev.respective_relevance ?? "—" }}</p>
+              <p>{{ ev.text }}</p>
+            </el-timeline-item>
+          </el-timeline>
+        </template>
+        <el-empty v-else description="No events found" />
+      </el-main>
+
+      <el-aside class="filters">
+        <FilterBlock title="Date"         :state="dateState"   :format="(t:CBVal)=>getFormattedDate(t as number)" />
+        <FilterBlock title="Person"       :state="personState" />
+        <FilterBlock title="Event"        :state="eventState" />
+        <FilterBlock title="Organization" :state="orgState" />
+      </el-aside>
+    </el-container>
+  </div>
 </template>
 
-<style scoped lang="scss">
-.main-events-header {
-	font-weight: normal;
-}
-
-.main-events-container {
-	margin: 1rem 3rem 0 3rem;
-}
-
-.main-events-header-container {
-	display: flex;
-	align-items: center;
-}
-
-.events-sort-select {
-	margin-left: 1rem;
-}
-
-.events-list-container {
-	padding: 0;
-}
-
-.timeline-event-header {
-	margin: 0;
-	font-weight: normal;
-}
-
-.events-filter-aside {
-	border-left: 1px var(--el-border-color) var(--el-border-style);
-	margin-left: 1rem;
-}
-
-ul {
-	padding-inline-start: 1px;
-}
-
-.filter-section-header {
-	font-weight: normal;
-	margin-bottom: 0;
-}
-
-.events-filter-container {
-	margin-left: 1rem;
-}
-
-.filter-checkbox-item {
-	width: 100%;
-}
-
-.events-and-match-header-divider {
-	margin: 0;
-}
+<style scoped>
+.main-events   { margin:1rem 3rem 0; }
+.header        { display:flex; align-items:center; gap:1rem; }
+.timeline-col  { padding:0; }
+.rel           { font-size:.85rem; opacity:.7; margin:.25rem 0 .5rem; }
+.filters       { border-left:1px solid var(--el-border-color); padding-left:1rem; }
+.filter-block  { margin-bottom:1rem; }
+.filter-header { margin:0 0 .25rem 0; font-weight:normal; }
+.filter-group  { display:flex; flex-direction:column; margin-top:.5rem; }
 </style>

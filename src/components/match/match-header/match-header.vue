@@ -1,13 +1,17 @@
 <script lang="ts" setup>
+import { getMediaUrl } from "@/Utils/getMediaUrl"
 import { ArrowRight } from "@element-plus/icons-vue"
 import { getTagType } from "@/Utils/getTagType.ts"
 import { getFormattedDate } from "@/Utils/getFormattedDate.ts"
+import { capitalize } from "@/Utils/capitalize"
 import type { MatchTag } from "@/types/match"
 
 const props = defineProps<{
 	match_title: string
 	match_timestamp: number
 	match_status: MatchTag
+	competition_name: string
+	competition_logo_url?: string
 }>()
 </script>
 
@@ -15,18 +19,24 @@ const props = defineProps<{
 	<div class="match-header-container">
 		<el-breadcrumb :separator-icon="ArrowRight" class="history-breadcrumb">
 			<el-breadcrumb-item :to="{ path: '/' }">Main page</el-breadcrumb-item>
-			<el-breadcrumb-item>Football matches</el-breadcrumb-item>
+			<el-breadcrumb-item>
+				{{ props.competition_name }} matches
+			</el-breadcrumb-item>
 			<el-breadcrumb-item>
 				{{ props.match_title }} {{ getFormattedDate(props.match_timestamp) }}
 			</el-breadcrumb-item>
 		</el-breadcrumb>
 
 		<div class="match-title-container">
-			<el-avatar class="tournament-avatar" src="https://cdn.worldvectorlogo.com/logos/premier-league-1.svg" />
+			<img
+				v-if="props.competition_logo_url"
+				class="tournament-avatar"
+				:src="getMediaUrl(props.competition_logo_url)"
+			/>
 			<h3 class="match-title">{{ props.match_title }}</h3>
 			<h3 class="match-date">{{ getFormattedDate(props.match_timestamp) }}</h3>
 			<el-tag :type="getTagType(props.match_status)">
-				{{ props.match_status }}
+				{{ capitalize(props.match_status) }}
 			</el-tag>
 		</div>
 		<el-divider class="match-title-bottom-divider" />
@@ -50,9 +60,9 @@ const props = defineProps<{
 }
 
 .tournament-avatar {
-	border: unset;
-	border-radius: unset;
-	background-color: unset;
+	object-fit: contain;
+	width: 10%;
+	height: 10%;
 }
 
 .match-title {
@@ -69,4 +79,6 @@ const props = defineProps<{
 .match-title-bottom-divider {
 	margin: 0;
 }
+
+
 </style>

@@ -1,5 +1,4 @@
-import type { MatchTag } from "@/types/match"
-
+import { MatchTag } from "@/types/match"
 export const getTagType = (status: MatchTag) => {
 	switch (status) {
 		case MatchTag.LIVE:
@@ -8,7 +7,7 @@ export const getTagType = (status: MatchTag) => {
 			return "success"
 		case MatchTag.SCHEDULED:
 			return "warning"
-		case MatchTag.CANCELED:
+		case MatchTag.CANCELLED:
 			return "danger"
 	}
 }

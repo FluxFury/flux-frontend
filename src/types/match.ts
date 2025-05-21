@@ -4,13 +4,15 @@
 export enum MatchTag {
 	LIVE = "LIVE",
 	FINISHED = "FINISHED",
-	CANCELED = "CANCELED",
+	CANCELLED = "CANCELLED",
 	SCHEDULED = "SCHEDULED"
 }
 
 export type Match = {
 	id: number
 	title: string
+	competition_name: string | null
+	competition_logo_url: string | null
 	status: MatchTag
 	timestamp: number
 	count_events: number
