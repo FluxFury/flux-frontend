@@ -1,0 +1,11 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "80:80"
+    networks:
+      - flux-backend_app_network
+
+networks:
+  flux-backend_app_network:
+    external: true
