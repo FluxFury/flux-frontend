@@ -19,8 +19,11 @@ const props = defineProps<{
 	<div class="match-header-container">
 		<el-breadcrumb :separator-icon="ArrowRight" class="history-breadcrumb">
 			<el-breadcrumb-item :to="{ path: '/' }">Main page</el-breadcrumb-item>
-			<el-breadcrumb-item>
-				{{ props.competition_name }} matches
+			<el-breadcrumb-item v-if="props.competition_name">
+			{{ props.competition_name }} matches
+			</el-breadcrumb-item>
+			<el-breadcrumb-item v-else>
+			Unknown competition
 			</el-breadcrumb-item>
 			<el-breadcrumb-item>
 				{{ props.match_title }} {{ getFormattedDate(props.match_timestamp) }}

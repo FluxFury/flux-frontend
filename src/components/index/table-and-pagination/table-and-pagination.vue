@@ -260,7 +260,7 @@ const finishedStatusOptions = [
 
 <style scoped lang="scss">
 .table-and-pagination-links-container {
-  margin: 2rem 3rem 0 3rem;
+  margin: 2rem 3rem 2rem 3rem;   // ⬅︎ 2 rem снизу
 }
 .table-pagination {
   width: fit-content;
