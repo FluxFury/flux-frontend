@@ -23,12 +23,7 @@ const handleLogoClick = () => {
 
 <template>
 	<div class="switch-container">
-		<el-switch
-			class="color-theme-switch"
-			v-model="theme_switch"
-			:active-action-icon="Sunny"
-			:inactive-action-icon="Moon"
-		/>
+
 	</div>
 
 	<!--logo and search-->
