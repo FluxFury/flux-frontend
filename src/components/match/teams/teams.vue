@@ -9,6 +9,7 @@ const props = defineProps<{ teams: TeamOut[] }>()
   <div class="teams-container">
     <div v-for="team in props.teams" :key="team.team_id" class="team-roster-container">
       <h3>{{ team.team_name }}</h3>
+	  <div class="team-score">Score: {{ team.score }}</div>
       <el-table :data="team.main_roster" style="width:100%">
         <el-table-column prop="name" label="Name" />
         <el-table-column prop="nickname" label="Nickname" />
@@ -33,6 +34,13 @@ const props = defineProps<{ teams: TeamOut[] }>()
   /* две колонки по ~45% внутреннего контейнера */
   flex: 0 0 45%;
   min-width: 300px;
+}
+
+.team-score {
+  margin-bottom: 1em;
+  font-size: 1.1em;
+  color: #888;
+  font-weight: 500;
 }
 
 /* именно этот блок станет прокручиваемым */

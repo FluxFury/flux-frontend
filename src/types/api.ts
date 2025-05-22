@@ -46,6 +46,7 @@ export type PageMeta = {
     team_id:    string
     team_name:  string
     main_roster: TeamMember[]
+    score: number | string
   }
   
   export interface MatchEventOut {
