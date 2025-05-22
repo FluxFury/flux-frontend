@@ -52,40 +52,58 @@ export const useEventsStore = defineStore("events", {
     filtered_events (s): MatchEventOut[] {
       let list = [...s.rawEvents]
 
-      // ====== КРИТИЧЕСКАЯ ИЗМЕНЕННАЯ ЛОГИКА ======
-      // Если фильтр (любой) НЕ выбран - НИЧЕГО не показывать (если в нем есть опции)
-      // Проверяем для каждого фильтра, есть ли соответствующие опции в исходных данных
 
-      // По дате
-      if (s.timestamps.length && s.timestampsFilter.length === 0) {
-        return []
-      }
-      // По людям
-      if (s.persons.length && s.personsFilter.length === 0) {
-        return []
-      }
-      // По событиям
-      if (s.events.length && s.eventsFilter.length === 0) {
-        return []
-      }
-      // По организациям
-      if (s.orgs.length && s.orgsFilter.length === 0) {
-        return []
-      }
-
-      // --- Обычная фильтрация, если какие-то фильтры выбраны ---
-      if (s.timestampsFilter.length) {
-        const set = new Set(s.timestampsFilter)
-        list = list.filter(e => set.has(
-          Date.parse(e.news_creation_time ?? (e.timestamp as string))
-        ))
-      }
-      if (s.personsFilter.length)
-        list = list.filter(e => hasAnyKeyword(e, "People", s.personsFilter))
-      if (s.eventsFilter.length)
-        list = list.filter(e => hasAnyKeyword(e, "Events", s.eventsFilter))
-      if (s.orgsFilter.length)
-        list = list.filter(e => hasAnyKeyword(e, "Organizations", s.orgsFilter))
+	  if (s.timestamps.length && s.timestampsFilter.length === 0) return []
+	  if (s.persons.length    && s.personsFilter.length   === 0) return []
+	  if (s.events.length     && s.eventsFilter.length    === 0) return []
+	  if (s.orgs.length       && s.orgsFilter.length      === 0) return []
+	
+	  /* ==== активность фильтров ==== */
+	  const dateActive   = s.timestampsFilter.length && s.timestampsFilter.length < s.timestamps.length
+	  const peopleActive = s.personsFilter.length   && s.personsFilter.length    < s.persons.length
+	  const eventsActive = s.eventsFilter.length    && s.eventsFilter.length     < s.events.length
+	  const orgsActive   = s.orgsFilter.length      && s.orgsFilter.length       < s.orgs.length
+	
+	  /* ======= применяем ======= */
+	
+	  /* ДАТА – как было: показываем только выбранные даты */
+	  if (dateActive) {
+		const set = new Set(s.timestampsFilter)
+		list = list.filter(e =>
+		  set.has(Date.parse(e.news_creation_time ?? (e.timestamp as string)))
+		)
+	  }
+	
+	  /* PEOPLE – убираем события, содержащие хоть один снятый чек-бокс */
+	  if (peopleActive) {
+		const excluded = new Set(
+		  s.persons.filter(p => !s.personsFilter.includes(p))
+		)
+		list = list.filter(e =>
+		  !(e.keywords?.People ?? []).some(p => excluded.has(p))
+		)
+	  }
+	
+	  /* EVENTS */
+	  if (eventsActive) {
+		const excluded = new Set(
+		  s.events.filter(ev => !s.eventsFilter.includes(ev))
+		)
+		list = list.filter(e =>
+		  !(e.keywords?.Events ?? []).some(ev => excluded.has(ev))
+		)
+	  }
+	
+	  /* ORGS */
+	  if (orgsActive) {
+		const excluded = new Set(
+		  s.orgs.filter(o => !s.orgsFilter.includes(o))
+		)
+		list = list.filter(e =>
+		  !(e.keywords?.Organizations ?? []).some(o => excluded.has(o))
+		)
+	  }
+	
 
       // --- Сортировка ---
       switch (s.sortType) {

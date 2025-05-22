@@ -9,7 +9,7 @@ export const getFormattedDate = (date: string | number | Date, fallback = "-") =
     // Проверяем валидность
     if (isNaN(d.getTime())) return fallback
 
-    return format(d, "dd.MM.yyyy HH:mm")
+    return format(d, "dd.MM.yyyy HH:mm:ss")
   } catch {
     return fallback
   }

@@ -42,7 +42,7 @@ watch(() => route.params.id, id => {
 
     <!-- Основные события -->
     <MainEvents
-      v-if="matchStore.events"
+      v-if="matchStore.events?.data?.length"
       :events="matchStore.events.data"
       :facets="matchStore.events.facets"
     />
